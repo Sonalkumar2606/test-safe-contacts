@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us - SafeContacts</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #4a90e2;
+      --primary-dark: #3578c8;
+      --text-color: #333;
+      --light-bg: #f2f6fc;
+      --white: #ffffff;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: var(--white);
+      text-align: center;
+      padding: 14px 20px;
+      border-bottom-left-radius: 30px;
+      border-bottom-right-radius: 30px;
+      font-size: 28px;
+      font-weight: 600;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .container {
+      padding: 30px 20px;
+      max-width: 700px;
+      margin: 0 auto;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0 0 20px;
+      color: var(--primary-color);
+      font-size: 2.2rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    h1:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--primary-color);
+      border-radius: 3px;
+    }
+
+    .highlight {
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
+    p {
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+
+    .features {
+      margin: 30px 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--white);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 30px auto 0;
+      background-color: var(--primary-color);
+      color: var(--white);
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: var(--transition);
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .back-btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .back-btn i {
+      margin-right: 8px;
+    }
+
+    .team-section {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .team-member {
+      display: inline-block;
+      margin: 15px;
+      text-align: center;
+    }
+
+    .team-member img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--primary-color);
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .features {
+        grid-template-columns: 1fr;
+      }
+      
+      .container {
+        padding: 20px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    About SafeContacts
+  </header>
+
+  <div class="container">
+    <h1>Welcome to <span class="highlight">SafeContacts</span></h1>
+    
+    <p>
+      SafeContacts is a secure and modern contact management platform built for simplicity and safety.
+      Our mission is to help users <span class="highlight">store, access, and manage contacts</span> securely from any device, anywhere.
+    </p>
+    
+    <p>
+      With Firebase-powered authentication and cloud storage, your data is synced across all devices.
+      Whether you're switching phones or just want an easy way to manage emergency contacts — <strong>SafeContacts is here for you.</strong>
+    </p>
+    
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-lock"></i>
+        </div>
+        <h3>Secure Storage</h3>
+        <p>Your contacts are encrypted and protected with enterprise-grade security</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-sync-alt"></i>
+        </div>
+        <h3>Cloud Sync</h3>
+        <p>Access your contacts from any device with automatic cloud synchronization</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <h3>Mobile Friendly</h3>
+        <p>Designed to work perfectly on all devices from phones to tablets</p>
+      </div>
+    </div>
+    
+    <div class="team-section">
+      <h2>Our Team</h2>
+      <div class="team-member">
+        <img src="https://via.placeholder.com/100" alt="Team Member">
+        <h3>Sonal Kumar</h3>
+        <p>Founder & Developer</p>
+      </div>
+    </div>
+    
+    <a href="index.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+  </div>
+</body>
+</html>

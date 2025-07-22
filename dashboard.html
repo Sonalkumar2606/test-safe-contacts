@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Contacts - SafeContacts</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #4a90e2;
+      --danger-color: #e74c3c;
+      --gray-color: #555;
+      --light-gray: #f0f0f0;
+      --white: #ffffff;
+      --shadow: 0 2px 6px rgba(0,0,0,0.1);
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #f2f6fc;
+      color: #333;
+    }
+
+    header {
+      background-color: var(--primary-color);
+      padding: 20px;
+      border-bottom-left-radius: 30px;
+      border-bottom-right-radius: 30px;
+      color: var(--white);
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      position: relative;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .logout-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background-color: var(--white);
+      color: var(--primary-color);
+      border: none;
+      border-radius: 50%;
+      padding: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .logout-btn:hover {
+      background-color: var(--primary-color);
+      color: var(--white);
+      transform: scale(1.1);
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 500px;
+      margin: 0 auto;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .search-box {
+      background-color: var(--light-gray);
+      width: 90%;
+      border-radius: 20px;
+      padding: 10px 5%;
+      display: flex;
+      align-items: center;
+      transition: var(--transition);
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+    }
+
+    .search-box:focus-within {
+      box-shadow: 0 0 0 2px var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .search-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 16px;
+      flex: 1;
+      padding: 5px;
+    }
+
+    .contact-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .contact-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .contact-info strong {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .contact-info span {
+      font-size: 14px;
+      color: var(--gray-color);
+    }
+
+    .icons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .icons button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--gray-color);
+      transition: var(--transition);
+      padding: 5px;
+      border-radius: 50%;
+    }
+
+    .icons button:hover {
+      background-color: rgba(0,0,0,0.05);
+    }
+
+    .icons button:first-child:hover {
+      color: var(--primary-color);
+    }
+
+    .icons button:last-child:hover {
+      color: var(--danger-color);
+    }
+
+    .add-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: var(--primary-color);
+      color: var(--white);
+      border: none;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      font-size: 28px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: var(--transition);
+      z-index: 100;
+    }
+
+    .add-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content {
+      background: var(--white);
+      padding: 25px;
+      border-radius: 12px;
+      width: 85%;
+      max-width: 400px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .modal h2 {
+      margin-top: 0;
+      text-align: center;
+      color: var(--primary-color);
+    }
+
+    .modal label {
+      display: block;
+      font-weight: bold;
+      margin: 1px 0 5px 5px;
+    }
+
+    .modal input {
+      width: 90%;
+      padding: 10px 5%;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: var(--transition);
+    }
+
+    .modal input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: var(--transition);
+    }
+
+    .btn-secondary {
+      background-color: #ccc;
+      color: #333;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: var(--white);
+    }
+
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: var(--white);
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      color: var(--gray-color);
+      font-size: 16px;
+      margin-top: 30px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .empty-state i {
+      font-size: 40px;
+      color: #ccc;
+      margin-bottom: 10px;
+    }
+
+    /* Loading State */
+    .loading {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--primary-color);
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .modal-content {
+        width: 80%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    My Contacts
+    <button class="logout-btn" onclick="logout()" title="Logout">
+      <i class="fas fa-sign-out-alt"></i>
+    </button>
+  </header>
+
+  <div id="user-name" style="font-size: 16px; font-weight: normal; margin-top: 20px; text-align: center;"></div>
+  
+  <div class="container">
+    <div class="search-box">
+      <i class="fas fa-search" style="margin-right: 8px; color: #777;"></i>
+      <input type="text" placeholder="Search contacts..." id="searchInput" oninput="filterContacts()">
+    </div>
+    
+    <div id="contactsList"></div>
+    <div id="loadingIndicator" class="loading" style="display: none;">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <button class="add-btn" onclick="openAddModal()" title="Add New Contact">
+    <i class="fas fa-plus"></i>
+  </button>
+
+  <!-- Add Contact Modal -->
+  <div id="addContactModal" class="modal" onclick="closeAddModalOnOutsideClick(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <h2><i class="fas fa-user-plus" style="margin-right: 10px;"></i>Add New Contact</h2>
+      
+      <label for="newName">Name:</label>
+      <input type="text" id="newName" placeholder="Enter name">
+      
+      <label for="newPhone">Phone:</label>
+      <input type="tel" id="newPhone" placeholder="Enter phone number">
+      
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeAddModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveContact()">Save Contact</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Contact Modal -->
+  <div id="editContactModal" class="modal" onclick="closeEditModalOnOutsideClick(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <h2><i class="fas fa-user-edit" style="margin-right: 10px;"></i>Edit Contact</h2>
+      
+      <input type="hidden" id="editContactId">
+      
+      <label for="editName">Name:</label>
+      <input type="text" id="editName" placeholder="Enter name">
+      
+      <label for="editPhone">Phone:</label>
+      <input type="tel" id="editPhone" placeholder="Enter phone number">
+      
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="updateContact()">Update Contact</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="modal" onclick="closeDeleteModalOnOutsideClick(event)">
+    <div class="modal-content" onclick="event.stopPropagation()" style="text-align: center;">
+      <h2><i class="fas fa-exclamation-triangle" style="color: var(--danger-color); margin-right: 10px;"></i>Confirm Delete</h2>
+      <p style="font-size: 16px; margin-bottom: 25px;">Are you sure you want to delete this contact?</p>
+      
+      <div style="display: flex; justify-content: center; gap: 15px;">
+        <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      getDocs,
+      deleteDoc,
+      updateDoc,
+      doc
+    } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtDhFeEhsYSCbGkSfe88_lWmm-K28Xuok",
+      authDomain: "safe-contacts-a07a2.firebaseapp.com",
+      projectId: "safe-contacts-a07a2",
+      storageBucket: "safe-contacts-a07a2.appspot.com",
+      messagingSenderId: "16060139536",
+      appId: "1:16060139536:web:d5017ae5a5da0830636295",
+      measurementId: "G-3KR9PS48PL"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    let currentUser;
+    let contactData = [];
+
+    // Initialize the app
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        document.getElementById("user-name").textContent = `Welcome, ${user.displayName || "User"}!`;
+        showLoading(true);
+        loadContacts(user.uid);
+      } else {
+        window.location.href = "login.html";
+      }
+    });
+
+    // Show/hide loading indicator
+    function showLoading(show) {
+      document.getElementById('loadingIndicator').style.display = show ? 'flex' : 'none';
+    }
+
+    // Load contacts from Firestore
+    async function loadContacts(uid) {
+      try {
+        contactData = [];
+        const snapshot = await getDocs(collection(db, "users", uid, "contacts"));
+        snapshot.forEach((docSnap) => {
+          contactData.push({
+            id: docSnap.id,
+            ...docSnap.data()
+          });
+        });
+        renderContacts(contactData);
+      } catch (error) {
+        console.error("Error loading contacts: ", error);
+        alert("Failed to load contacts. Please try again.");
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    // Render contacts to the UI
+    function renderContacts(contacts) {
+      const list = document.getElementById("contactsList");
+      list.innerHTML = "";
+      
+      if (contacts.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-address-book"></i><br>
+            No contacts found. Add your first contact!
+          </div>
+        `;
+        return;
+      }
+
+      contacts.forEach((contact) => {
+        const card = document.createElement("div");
+        card.className = "contact-card";
+        card.innerHTML = `
+          <div class="contact-info">
+            <strong>${contact.name}</strong>
+            <span>${formatPhoneNumber(contact.phone)}</span>
+          </div>
+          <div class="icons">
+            <button onclick="editContact('${contact.id}', '${contact.name.replace(/'/g, "\\'")}', '${contact.phone}')" title="Edit">
+              <i class="fas fa-pen"></i>
+            </button>
+            <button onclick="deleteContact('${contact.id}')" title="Delete">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    // Format phone number for display
+    function formatPhoneNumber(phone) {
+      // Simple formatting - you can enhance this
+      return phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+    }
+
+    // Filter contacts based on search input
+    window.filterContacts = function() {
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = contactData.filter(c =>
+        c.name.toLowerCase().includes(search) ||
+        c.phone.toLowerCase().includes(search)
+      );
+      renderContacts(filtered);
+    };
+
+    // Add Contact Modal Functions
+      document.getElementById('addContactModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeAddModal();
+      }
+    });
+    window.openAddModal = function() {
+      document.getElementById("addContactModal").style.display = "flex";
+      document.getElementById("newName").focus();
+    };
+
+    window.closeAddModal = function() {
+      document.getElementById("addContactModal").style.display = "none";
+      document.getElementById("newName").value = "";
+      document.getElementById("newPhone").value = "";
+    };
+
+    function closeAddModalOnOutsideClick(event) {
+      if (event.target === document.getElementById('addContactModal')) {
+        closeAddModal();
+      }
+    }
+
+    window.saveContact = async function() {
+      const name = document.getElementById("newName").value.trim();
+      const phone = document.getElementById("newPhone").value.trim();
+
+      if (!name || !phone) {
+        alert("Please fill in both name and phone fields.");
+        return;
+      }
+
+      try {
+        showLoading(true);
+        await addDoc(collection(db, "users", currentUser.uid, "contacts"), {
+          name,
+          phone,
+          createdAt: new Date()
+        });
+        closeAddModal();
+        loadContacts(currentUser.uid);
+      } catch (error) {
+        console.error("Error adding contact: ", error);
+        alert("Failed to add contact. Please try again.");
+      } finally {
+        showLoading(false);
+      }
+    };
+
+    // Edit Contact Modal Functions
+    document.getElementById('editContactModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeEditModal();
+      }
+    });
+    window.openEditModal = function(id, name, phone) {
+      document.getElementById('editContactId').value = id;
+      document.getElementById('editName').value = name;
+      document.getElementById('editPhone').value = phone;
+      document.getElementById('editContactModal').style.display = 'flex';
+      document.getElementById('editName').focus();
+    };
+
+    window.closeEditModal = function() {
+      document.getElementById('editContactModal').style.display = 'none';
+    };
+
+    function closeEditModalOnOutsideClick(event) {
+      if (event.target === document.getElementById('editContactModal')) {
+        closeEditModal();
+      }
+    }
+
+    window.updateContact = async function() {
+      const id = document.getElementById('editContactId').value;
+      const name = document.getElementById('editName').value.trim();
+      const phone = document.getElementById('editPhone').value.trim();
+
+      if (!name || !phone) {
+        alert('Please fill in both name and phone fields.');
+        return;
+      }
+
+      try {
+        showLoading(true);
+        await updateDoc(doc(db, "users", currentUser.uid, "contacts", id), {
+          name,
+          phone,
+          updatedAt: new Date()
+        });
+        closeEditModal();
+        loadContacts(currentUser.uid);
+      } catch (error) {
+        console.error("Error updating contact: ", error);
+        alert("Failed to update contact. Please try again.");
+      } finally {
+        showLoading(false);
+      }
+    };
+
+    window.editContact = function(id, name, phone) {
+      openEditModal(id, name, phone);
+    };
+
+    // Delete Contact Functions
+    document.getElementById('deleteModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeDeleteModal();
+      }
+    });
+
+    let deleteTargetId = null;
+
+    window.deleteContact = function(id) {
+      deleteTargetId = id;
+      document.getElementById("deleteModal").style.display = "flex";
+    };
+
+    window.closeDeleteModal = function() {
+      deleteTargetId = null;
+      document.getElementById("deleteModal").style.display = "none";
+    };
+
+    function closeDeleteModalOnOutsideClick(event) {
+      if (event.target === document.getElementById('deleteModal')) {
+        closeDeleteModal();
+      }
+    }
+
+    window.confirmDelete = async function() {
+      if (!deleteTargetId) return;
+
+      try {
+        showLoading(true);
+        await deleteDoc(doc(db, "users", currentUser.uid, "contacts", deleteTargetId));
+        loadContacts(currentUser.uid);
+      } catch (error) {
+        console.error("Error deleting contact: ", error);
+        alert("Failed to delete contact. Please try again.");
+      } finally {
+        closeDeleteModal();
+        showLoading(false);
+      }
+    };
+
+// Modal content par click karne se band n ho
+      document.querySelectorAll('.modal-content').forEach(content => {
+        content.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      });
+
+    // Logout function
+    window.logout = function() {
+      if (confirm("Are you sure you want to logout?")) {
+        signOut(auth).then(() => {
+          window.location.href = "login.html";
+        }).catch((error) => {
+          console.error("Logout error: ", error);
+          alert("Failed to logout. Please try again.");
+        });
+      }
+    };
+
+    // Close modals with Escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeAddModal();
+        closeEditModal();
+        closeDeleteModal();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>signup - SafeContacts</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    .error-message {
+    color: red;
+    font-size: 13px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+  }
+   
+   body {
+      margin: 0;
+      padding: 0px;
+      overflow-y: auto;
+      background: linear-gradient(to bottom, #4a90e2, #dceeff);
+      display: block;
+      font-family: Arial, sans-serif;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+   }
+   .mdiv{
+      margin: 0px auto;
+      width: 90%;
+      max-width: 350px;
+      height: fit-content;
+      padding: 0px 20px 20px;
+   }
+
+    h1{
+      text-align: center;
+      opacity: 0;
+      animation: fade-in 1s ease-out forwards;
+   }
+   @keyframes fade-in {
+      to {
+         opacity: 1;
+      }
+   }
+   h2{
+      text-align: center;
+   }
+
+   .mh{
+      padding: 0px;
+      color: white;
+   }
+
+   .login-container{
+      border-radius: 30px;
+      background-color: rgb(255, 255, 255);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding-top: 10px;
+      animation: fadeIn 0.5s ease;
+   }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+
+   .profile{
+      margin: -60px auto 10px;
+      width: 120px; 
+      height: 120px; 
+      border-radius: 50%; 
+      object-fit: cover; 
+   }
+   .profile-pic{
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      margin: 0 auto;
+   }
+
+
+
+   .box{
+      padding: 10px;
+   }
+
+   .login-form{
+      align-items: stretch;
+      display: flex;
+      flex-direction: column;
+   }
+   .login-form label{
+      margin-top: 5px;
+      margin-bottom: -15px;
+      margin-left: 5px;
+      font-weight: bold;
+      text-align: left;
+   }
+
+   .login-form input{
+       padding-top: 8px;
+       padding-left: 5px;
+       padding-bottom: 10px;
+       width: 100%;
+       border: 1px solid #ccc;
+       border-radius: 6px;
+       font-size: 14px;
+       box-sizing: border-box;
+   }
+   .login-form button{
+      padding: 10px;
+      background-color: cornflowerblue;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      line-height: 1.2;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+   }
+   .login-form button:hover{
+      background-color: rgb(59, 99, 174);
+      transform: scale(1.01);
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.271);
+   }
+   .login-form button:active{
+      transform: scale(0.98);
+   }
+   .login-form p{
+      text-align: center;
+   }
+
+   .input-error{
+    border: 1px solid red;
+   }
+
+ @media (max-width: 480px) {
+  .mdiv {
+    margin-top: 40px;
+    padding: 0px;
+  }
+
+  .login-container{
+   box-shadow: none;
+   border-radius: 20px;
+  }
+}
+
+  
+</style>
+</head>
+
+<body>
+  <div id="notification" style="
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: none;
+    z-index: 9999;
+    font-weight: bold;
+    font-size: 15px;
+  ">
+    Signup successful! Redirecting...
+  </div>
+
+  <!-- Yeh tumhara baaki ka content start hota hai -->
+   <div class="mdiv">
+      <div class="mh">
+         <h1>Safe Contacts</h1>
+      </div><br>
+      <div class="login-container">
+        <h2>
+         Sign Up
+        </h2>
+        <div class="box">
+         <form onsubmit="return validateForm(event)" class="login-form">
+            <!-- ✅ Inside your <form> -->
+
+            <label for="fullname">Full Name</label><br>
+            <input type="text" onfocus="scrollIntoViewSafe(this)" placeholder="Your Name" id="fullname" name="fullname" required />
+            <p id="name-error" class="error-message"></p>
+
+            <label for="email">Email</label><br>
+            <input type="email" onfocus="scrollIntoViewSafe(this)" placeholder="sonal@example.com" id="email" name="email" required />
+            <p id="email-error" class="error-message"></p>
+
+            <label for="password">Password</label><br>
+            <div style="position: relative;">
+            <input type="password" onfocus="scrollIntoViewSafe(this)" id="password" name="password" placeholder="••••••2606"style="width: 100%; padding-right: 40px;" />
+            <i class="fas fa-eye" id="togglePassword" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer;"></i>
+            </div>
+            <p id="pass-error" class="error-message"></p>
+
+            <label for="confirm">Confirm Password</label><br>
+            <div style="position: relative;">
+            <input type="password" onfocus="scrollIntoViewSafe(this)" id="confirm" name="confirm" placeholder="••••••2606"style="width: 100%; padding-right: 40px;" />
+            <i class="fas fa-eye" id="toggleConfirmPassword" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer;"></i>
+            </div>
+            <p id="confirm-error" class="error-message"></p>
+
+            <div id="spinner" style="display: none; text-align: center; margin-bottom: 10px;">
+              <img src="images/spinner.gif" alt="Loading..." style="width: 30px;">
+            </div>
+
+            <button type="submit">Sign Up</button>
+            <p class="signup-text">Already have an account? <a style="text-decoration: none;" href="login.html">log in</a></p>
+         </form>
+        </div>
+      </div>
+   </div>
+<script>
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordInput = document.getElementById('password');
+
+  togglePassword.addEventListener('click', function () {
+    const type = passwordInput.type === 'password' ? 'text' : 'password';
+    passwordInput.type = type;
+    this.classList.toggle('fa-eye');
+    this.classList.toggle('fa-eye-slash');
+  });
+</script>
+<script>
+  const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+const confirmInput = document.getElementById('confirm');
+
+toggleConfirmPassword.addEventListener('click', function () {
+  const type = confirmInput.type === 'password' ? 'text' : 'password';
+  confirmInput.type = type;
+  this.classList.toggle('fa-eye');
+  this.classList.toggle('fa-eye-slash');
+});
+
+</script>
+
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
+  import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAtDhFeEhsYSCbGkSfe88_lWmm-K28Xuok",
+    authDomain: "safe-contacts-a07a2.firebaseapp.com",
+    projectId: "safe-contacts-a07a2",
+    storageBucket: "safe-contacts-a07a2.firebasestorage.app",
+    messagingSenderId: "16060139536",
+    appId: "1:16060139536:web:d5017ae5a5da0830636295",
+    measurementId: "G-3KR9PS48PL"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const auth = getAuth();
+
+window.validateForm = async function(event) {
+  event.preventDefault();
+
+  const nameInput = document.getElementById("fullname");
+  const emailInput = document.getElementById("email");
+  const passInput = document.getElementById("password");
+  const confirmInput = document.getElementById("confirm");
+  const spinner = document.getElementById("spinner");
+
+  const name = nameInput.value.trim();
+  const email = emailInput.value.trim();
+  const pass = passInput.value;
+  const confirm = confirmInput.value;
+
+  const nameErr = document.getElementById("name-error");
+  const emailErr = document.getElementById("email-error");
+  const passErr = document.getElementById("pass-error");
+  const confirmErr = document.getElementById("confirm-error");
+
+  // Clear previous messages and borders
+  nameErr.textContent = "";
+  emailErr.textContent = "";
+  passErr.textContent = "";
+  confirmErr.textContent = "";
+
+  [nameInput, emailInput, passInput, confirmInput].forEach(input => {
+    input.classList.remove("input-error");
+  });
+
+  let isValid = true;
+
+  if (name === "") {
+    nameErr.textContent = "Please enter your full name.";
+    nameInput.classList.add("input-error");
+    isValid = false;
+  }
+
+  if (!email.includes("@") || !email.includes(".")) {
+    emailErr.textContent = "Enter a valid email address.";
+    emailInput.classList.add("input-error");
+    isValid = false;
+  }
+
+  if (pass.length < 6) {
+    passErr.textContent = "Password must be at least 6 characters.";
+    passInput.classList.add("input-error");
+    isValid = false;
+  }
+
+  if (pass !== confirm) {
+    confirmErr.textContent = "Passwords do not match.";
+    confirmInput.classList.add("input-error");
+    isValid = false;
+  }
+
+  if (!isValid) return;
+
+  //  Show spinner
+  spinner.style.display = "block";
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+    const user = userCredential.user;
+
+    await updateProfile(user, { displayName: name });
+
+    showNotification("Signup successful! Redirecting...");
+    setTimeout(() => {
+      window.location.href = "login.html";
+    }, 2000);
+  } catch (error) {
+    emailErr.textContent = error.message;
+    emailInput.classList.add("input-error");
+  }
+
+  //  Hide spinner
+  spinner.style.display = "none";
+};
+
+  function showNotification(message) {
+    const notification = document.getElementById("notification");
+    notification.textContent = "✅ " + message;
+    notification.style.display = "block";
+    setTimeout(() => {
+      notification.style.display = "none";
+    }, 3000);
+  }
+</script>
+<script>
+  function scrollIntoViewSafe(el) {
+    setTimeout(() => {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 300);
+  }
+</script>
+</body>
+</html>
